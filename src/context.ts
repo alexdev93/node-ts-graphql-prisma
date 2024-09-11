@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
 import jwt from "jwt-simple";
-import { Request } from "express";
 import { IncomingMessage } from "node:http";
 
 // Instantiate Prisma Client
@@ -9,11 +8,11 @@ const prisma = new PrismaClient();
 // Interface to define the shape of the context object
 export interface Context {
   prisma: PrismaClient;
-  userId?: string | null; // Optional, because it will only exist for authenticated users
+  userId?: number | null; // Optional, because it will only exist for authenticated users
 }
 
 // Helper function to extract userId from JWT token using jwt-simple
-const getUserId = (req: IncomingMessage): string | null => {
+const getUserId = (req: IncomingMessage): number | null => {
   const authHeader = req.headers.authorization;
 
   if (authHeader) {
@@ -23,9 +22,9 @@ const getUserId = (req: IncomingMessage): string | null => {
     try {
       // Decode the JWT using jwt-simple and the secret key
       const decodedToken = jwt.decode(token, process.env.JWT_SECRET as string);
-
+      const userId: number = decodedToken.userId;
       // Assuming the token contains a userId field
-      return decodedToken.userId;
+      return userId;
     } catch (err) {
       console.error("Invalid token:", err);
       return null;

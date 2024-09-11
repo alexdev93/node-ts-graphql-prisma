@@ -4,6 +4,7 @@ export const typeDefs = gql`
   type User {
     id: Int!
     email: String!
+    password: String!
   }
 
   type Post {
@@ -20,6 +21,7 @@ export const typeDefs = gql`
 
   type Mutation {
     signUp(email: String!, password: String!): String
+    signIn(email: String!, password: String!): String
     createPost(title: String!, content: String!): Post
   }
 `;
