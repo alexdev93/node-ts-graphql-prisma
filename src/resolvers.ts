@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jwt-simple";
 import { PrismaClient } from "@prisma/client";
 import dotenv from "dotenv";
+import { Context, Post, User } from "./types";
 dotenv.config();
 
 const SECRET_KEY: any = process.env.JWT_SECRET;
@@ -9,10 +10,10 @@ const SECRET_KEY: any = process.env.JWT_SECRET;
 export const resolvers = {
 
   Query: {
-    users: async (_: any, __: any, { prisma }: { prisma: PrismaClient }) => {
+    users: async (_: any, __: any, { prisma }: Context) => {
       return await prisma.user.findMany();
     },
-    posts: async (_: any, __: any, { prisma }: { prisma: PrismaClient }) => {
+    posts: async (_: any, __: any, { prisma }: Context) => {
       return await prisma.post.findMany({ include: { author: true } });
     },
   },
@@ -21,8 +22,8 @@ export const resolvers = {
 
     signUp: async (
       _: any,
-      { email, password }: { email: string; password: string },
-      { prisma }: { prisma: PrismaClient }
+      { email, password }: User,
+      { prisma }: Context
     ) => {
       // Check if the user already exists
       const existingUser = await prisma.user.findUnique({
@@ -44,8 +45,8 @@ export const resolvers = {
 
     signIn: async (
       _: any,
-      { email, password }: { email: string; password: string },
-      { prisma }: { prisma: PrismaClient }
+      { email, password }: User,
+      { prisma }: Context
     ) => {
       const user = await prisma.user.findUnique({ where: { email } });
 
@@ -65,8 +66,8 @@ export const resolvers = {
 
     createPost: async (
       _: any,
-      { title, content }: { title: string; content: string },
-      { prisma, userId }: { prisma: PrismaClient; userId?: number | null }
+      { title, content }: Post,
+      { prisma, userId }: Context
     ) => {
       if (!userId) throw new Error("Not authenticated");
 
