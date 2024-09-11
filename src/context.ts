@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import jwt from "jwt-simple";
 import { Request } from "express";
+import { IncomingMessage } from "node:http";
 
 // Instantiate Prisma Client
 const prisma = new PrismaClient();
@@ -12,7 +13,7 @@ export interface Context {
 }
 
 // Helper function to extract userId from JWT token using jwt-simple
-const getUserId = (req: Request): string | null => {
+const getUserId = (req: IncomingMessage): string | null => {
   const authHeader = req.headers.authorization;
 
   if (authHeader) {
@@ -35,7 +36,7 @@ const getUserId = (req: Request): string | null => {
 };
 
 // Context function to be passed to Apollo Server
-export const createContext = ({ req }: { req: Request }): Context => {
+export const createContext = ({ req }: { req: IncomingMessage }): Context => {
   const userId = getUserId(req); // Extract userId if token exists and is valid
 
   return {

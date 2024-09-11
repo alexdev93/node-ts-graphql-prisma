@@ -1,17 +1,8 @@
-import express from "express";
 import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@apollo/server/express4";
-import { typeDefs } from "./schema";
-import { resolvers } from "./resolvers";
-import bodyParser from "body-parser";
-import cors from "cors";
-import { createContext } from "./context"; // Import your custom context
-
-const app = express();
-
-// CORS and Body parsing middleware
-app.use(cors());
-app.use(bodyParser.json());
+import { startStandaloneServer } from "@apollo/server/standalone";
+import { typeDefs } from "./schema"; // Your GraphQL schema (type definitions)
+import { resolvers } from "./resolvers"; // Your GraphQL resolvers
+import { createContext } from "./context"; // Custom context
 
 // Create Apollo Server instance
 const server = new ApolloServer({
@@ -19,23 +10,14 @@ const server = new ApolloServer({
   resolvers,
 });
 
+// Start the Apollo server in standalone mode
 const startServer = async () => {
-  await server.start();
+  const { url } = await startStandaloneServer(server, {
+    context: async ({ req }) => createContext({ req }), // Use your custom context function
+    listen: { port: 4000 }, // You can specify any port
+  });
 
-  // Use Express middleware for Apollo Server with full context (including Prisma and JWT)
-  app.use(
-    "/graphql",
-    expressMiddleware(server, {
-      context: async ({ req }) => {
-        // Use the custom context function you defined earlier
-        return createContext({ req });
-      },
-    })
-  );
+  console.log(`🚀 Server ready at ${url}`);
 };
 
-startServer().then(() => {
-  app.listen(4000, () => {
-    console.log("🚀 Server ready at http://localhost:4000/graphql");
-  });
-});
+startServer();
