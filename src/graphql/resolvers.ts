@@ -1,7 +1,12 @@
-
 import dotenv from "dotenv";
 dotenv.config();
-import { createPost, getPosts, getUsers, signIn, signUp } from "../services/user/service";
+import {
+  createPost,
+  getPosts,
+  getUsers,
+  signIn,
+  signUp,
+} from "../services/service";
 
 export const SECRET_KEY: any = process.env.JWT_SECRET;
 
