@@ -7,11 +7,7 @@ import { getUserId } from "../jwt";
 const prisma = new PrismaClient();
 
 // Context function to be passed to Apollo Server
-export const createContext = ({
-  request: req,
-}: {
-  request: IncomingMessage;
-}): Context => {
+export const createContext = ({ req }: { req: IncomingMessage }): Context => {
   const userId = getUserId(req);
 
   return {
