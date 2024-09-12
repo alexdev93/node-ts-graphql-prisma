@@ -1,4 +1,4 @@
-import { Context, Post, User } from "../../shared";
+import { Context, Post, User } from "../shared";
 import bcrypt from "bcryptjs";
 import jwt from "jwt-simple";
 import dotenv from "dotenv";
@@ -7,7 +7,7 @@ dotenv.config();
 const SECRET_KEY: any = process.env.JWT_SECRET;
 
 export const getUsers = async (_: any, __: any, { prisma }: Context) =>
-    prisma.user.findMany();
+  prisma.user.findMany();
 
 export const getPosts = async (_: any, __: any, { prisma }: Context) =>
   prisma.post.findMany({ include: { author: true } });
