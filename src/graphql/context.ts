@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { IncomingMessage } from "node:http";
-import { Context } from "../shared";
-import { getUserId } from "../jwt";
+import { Context } from "@/shared/types";
+import { getUserId } from "@/jwt";
 
 // Instantiate Prisma Client
 const prisma = new PrismaClient();

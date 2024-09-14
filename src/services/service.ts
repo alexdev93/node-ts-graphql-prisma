@@ -1,4 +1,4 @@
-import { Context, Post, User } from "../shared";
+import { Context, Post, User } from "@/shared/types";
 import bcrypt from "bcryptjs";
 import jwt from "jwt-simple";
 import dotenv from "dotenv";
@@ -16,7 +16,7 @@ export const signUp = async (
   _parent: unknown,
   { email, password }: Pick<User, "email" | "password">,
   { prisma }: Context
-): Promise<string> => {
+) => {
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = await prisma.user.create({
     data: { email, password: hashedPassword },

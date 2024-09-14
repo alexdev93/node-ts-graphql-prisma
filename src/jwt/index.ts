@@ -1,6 +1,16 @@
 import { IncomingMessage } from "node:http";
 import jwt from "jwt-simple";
 
+
+const getUserIdFromToken = (token: string): number | null => {
+  try {
+    const decodedToken = jwt.decode(token, process.env.JWT_SECRET as string);
+    return decodedToken.userId as number;
+  } catch {
+    return null;
+  }
+};
+
 const getTokenFromAuthorizationHeader = (
   request: IncomingMessage
 ): string | null => {
@@ -11,15 +21,6 @@ const getTokenFromAuthorizationHeader = (
   }
 
   return null;
-};
-
-const getUserIdFromToken = (token: string): number | null => {
-  try {
-    const decodedToken = jwt.decode(token, process.env.JWT_SECRET as string);
-    return decodedToken.userId as number;
-  } catch {
-    return null;
-  }
 };
 
 export const getUserId = (request: IncomingMessage): number | null => {

@@ -6,7 +6,7 @@ import {
   getUsers,
   signIn,
   signUp,
-} from "../services/service";
+} from "@/services/service";
 
 export const SECRET_KEY: any = process.env.JWT_SECRET;
 
